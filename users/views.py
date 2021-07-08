@@ -83,7 +83,7 @@ def user_login(request):
     user_data = JSONParser().parse(request)
     username = user_data["username"]
     password = user_data["password"]
-    print(password)
+    #print(password)
     user = authenticate(username=username, password=password)
     # user_serializer = UserSerializer(data=user_data, many=False)
     if user is None:

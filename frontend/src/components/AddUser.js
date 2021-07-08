@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import UserDataService from "../services/UserService";
 import Login from "./Login";
+import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-
+import { BsFillPersonFill } from "react-icons/bs";
+import { RiMailFill } from "react-icons/ri";
+import { RiLockPasswordFill } from "react-icons/ri";
+import { GrUserAdmin } from "react-icons/gr";
+import { TiSortAlphabeticallyOutline } from "react-icons/ti"
 const AddUser = () => {
   const initialUserState = {
     name: "",
@@ -59,9 +64,20 @@ const AddUser = () => {
         <Login />
       ) : (
         <div>
-          <h1>Sign up</h1>
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
+          <motion.h2
+          initial={{opacity: 0, color: 'FFFFFF'}} 
+          animate={{opacity: 1, color: '#707070'}}
+          transition={{ delay: 1, duration: 2 }}
+          >
+            Sign up
+          </motion.h2>
+          <motion.div 
+          className="form-group"
+          initial={{opacity: 0, x: '-100vw' }}
+          animate={{opacity: 1, x: 0 }}
+          transition={{ delay: 1.5, duration: 1.5}}
+          >
+            <label htmlFor="name"><TiSortAlphabeticallyOutline /> Name</label>
             <input
               type="text"
               className="form-control"
@@ -71,9 +87,14 @@ const AddUser = () => {
               onChange={handleInputChange}
               name="name"
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
+          </motion.div>
+          <motion.div 
+          className="form-group"
+          initial={{opacity: 0, x: '-100vw' }}
+          animate={{opacity: 1, x: 0 }}
+          transition={{ delay: 2, duration: 1.5}}
+          >
+            <label htmlFor="username"><BsFillPersonFill />{" "}Username</label>
             <input
               type="text"
               className="form-control"
@@ -83,21 +104,32 @@ const AddUser = () => {
               onChange={handleInputChange}
               name="username"
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="role">Role</label>
-            <input
-              type="text"
-              className="form-control"
-              id="role"
-              required
-              value={user.role}
-              onChange={handleInputChange}
-              name="role"
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
+          </motion.div>
+          <motion.div 
+          className="form-group"
+          initial={{opacity: 0, x: '-100vw' }}
+          animate={{opacity: 1, x: 0 }}
+          transition={{ delay: 2.5, duration: 1.5}}
+          >
+            <label htmlFor="role"><GrUserAdmin />{" "}Role</label>
+            <select
+                id="role"
+                defaultValue={user.role}
+                onChange={handleInputChange}
+                name="role"
+                required
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </motion.div>
+          <motion.div 
+          className="form-group"
+          initial={{opacity: 0, x: '-100vw' }}
+          animate={{opacity: 1, x: 0 }}
+          transition={{ delay: 3, duration: 1.5}}
+          >
+            <label htmlFor="email"><RiMailFill />{" "}Email</label>
             <input
               type="text"
               className="form-control"
@@ -107,9 +139,14 @@ const AddUser = () => {
               onChange={handleInputChange}
               name="email"
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
+          </motion.div>
+          <motion.div 
+          className="form-group"
+          initial={{opacity: 0, x: '-100vw' }}
+          animate={{opacity: 1, x: 0 }}
+          transition={{ delay: 3.5, duration: 1.5}}
+          >
+            <label htmlFor="password"><RiLockPasswordFill />{" "}Password</label>
             <input
               type="password"
               className="form-control"
@@ -119,15 +156,27 @@ const AddUser = () => {
               onChange={handleInputChange}
               name="password"
             />
-          </div>
+          </motion.div>
           <br></br>
-          <button onClick={saveUser} className="btn btn-success">
+          <motion.button 
+          onClick={saveUser} 
+          className="btn btn-success"
+          initial={{opacity: 0, x: '-100vw' }}
+          animate={{opacity: 1, x: 0 }}
+          transition={{ delay: 4, duration: 1.5}}
+          >
             Submit
-          </button>
+          </motion.button>
           <br></br>
-          <Link to={"/login-user"} className="nav-link">
-            Have an account ?
-          </Link>
+          <motion.div
+          initial={{opacity: 0, x: '-100vw' }}
+          animate={{opacity: 1, x: 0 }}
+          transition={{ delay: 4.5, duration: 1.5}}
+          >
+            <Link to={"/login-user"} className="nav-link">
+              Have an account ?
+            </Link>
+          </motion.div>
           <br></br>
           {err ? <p>{err}</p> : <p></p>}
         </div>

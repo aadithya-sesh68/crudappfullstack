@@ -1,11 +1,10 @@
 from rest_framework import viewsets
 from users.models import User
 from rest_framework import status
-# from django.contrib.auth.models import User  # new
+from django.contrib.auth import logout
 from django.http.response import JsonResponse
 from . import serializers
 from rest_framework.parsers import JSONParser
-
 
 class UserViewset(viewsets.ModelViewSet):
     # queryset = models.User.objects.all()

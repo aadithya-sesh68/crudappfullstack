@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import UserDataService from "../services/UserService";
 import axios from "axios";
-
+import Alert from 'react-bootstrap/Alert';
+import { Modal } from 'react-bootstrap';
+import { BsFillPersonFill } from "react-icons/bs";
+import { GrUserAdmin } from "react-icons/gr";
+import { TiSortAlphabeticallyOutline } from "react-icons/ti"
+import { motion } from "framer-motion";
 const User = (props) => {
   var initialUserState = {
     id: null,
@@ -22,6 +27,10 @@ const User = (props) => {
   const [currentUser, setCurrentUser] = useState(initialUserState);
   console.log(currentUser);
   const [message, setMessage] = useState("");
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const getUser = (id) => {
     UserDataService.get(id)
@@ -49,7 +58,7 @@ const User = (props) => {
   const updateUser = () => {
     axios({
       method: "put",
-      url: `http://127.0.0.1:8000/router/user/${currentUser.id}/`,
+      url: `http://localhost:8000/router/user/${currentUser.id}/`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -58,8 +67,11 @@ const User = (props) => {
     })
       .then((response) => {
         console.log(response.data);
-        setMessage("The user was deleted successfully!");
-        props.history.push("/users-list");
+        setMessage("The user was updated successfully!");
+        props.history.push({
+          pathname: "/users-list",
+          state: { isAuth: true },
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -73,7 +85,7 @@ const User = (props) => {
   const deleteUser = () => {
     axios({
       method: "delete",
-      url: `http://127.0.0.1:8000/router/user/${currentUser.id}/`,
+      url: `http://localhost:8000/router/user/${currentUser.id}/`,
       headers: {
         "Content-Type": "application/json",
       },
@@ -82,7 +94,10 @@ const User = (props) => {
     })
       .then((response) => {
         setMessage("The user was deleted successfully!");
-        props.history.push("/users-list");
+        props.history.push({
+          pathname: "/users-list",
+          state: { isAuth: true },
+        });
       })
       .catch((e) => {
         console.log(e);
@@ -91,17 +106,30 @@ const User = (props) => {
       });
   };
   const back = () => {
-    props.history.push("/users-list");
+    props.history.push({
+      pathname: "/users-list",
+      state: { isAuth: true },
+    });
   };
   return (
     <div>
       {currentUser ? (
         <div className="edit-form">
-          <h4>User Detail:</h4>
-          <form>
+          <motion.h4
+          initial={{opacity: 0, color: 'FFFFFF'}} 
+          animate={{opacity: 1, color: '#707070'}}
+          transition={{ delay: 1, duration: 2 }}
+          >
+            User Details
+          </motion.h4>
+          <motion.form
+          initial={{opacity: 0, x: '-100vw' }}
+          animate={{opacity: 1, x: 0 }}
+          transition={{ delay: 1.5, duration: 1.5}}
+          >
             <br></br>
             <div className="form-group">
-              <label htmlFor="name">Username</label>
+              <label htmlFor="name"><BsFillPersonFill/> Username</label>
               <input
                 type="text"
                 className="form-control"
@@ -113,7 +141,7 @@ const User = (props) => {
             </div>
             <br></br>
             <div className="form-group">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name"><TiSortAlphabeticallyOutline /> Name</label>
               <input
                 type="text"
                 className="form-control"
@@ -125,49 +153,85 @@ const User = (props) => {
             </div>
             <br></br>
             <div className="form-group">
-              <label htmlFor="role">Role</label>
-              <input
-                type="text"
-                className="form-control"
+              <label htmlFor="role"><GrUserAdmin /> Role</label>
+              <select
                 id="role"
-                value={currentUser.role}
+                defaultValue={currentUser.role}
                 onChange={handleInputChange}
                 name="role"
-              />
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
             </div>
             <br></br>
-          </form>
+          </motion.form>
           <br></br>
           {lgUserRole === "admin" || currentUser.username === loggedInUser ? (
-            <button className="btn btn-danger mr-2" onClick={deleteUser}>
-              Delete
-            </button>
+            <>
+              <motion.button 
+              className="btn btn-danger mr-2"
+              onClick={handleShow}
+              initial={{opacity: 0, x: '-100vw' }}
+              animate={{opacity: 1, x: 0 }}
+              transition={{ delay: 2, duration: 1.5}}
+              >
+                Delete
+              </motion.button>
+              <Modal show={show} onHide={handleClose}>
+                <Modal.Header>
+                    <Modal.Title>Delete User</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete the user?</Modal.Body>
+                <Modal.Footer>
+                    <button className="btn btn-secondary" onClick={handleClose}>
+                        Close
+                    </button>
+                    <button className="btn btn-danger" onClick={deleteUser}>
+                        Yes, delete
+                    </button>
+                </Modal.Footer>
+              </Modal>
+            </>
           ) : (
             <div></div>
           )}
           {"  "}
           {currentUser.username === loggedInUser ? (
-            <button
+            <motion.button
               type="submit"
-              className="btn btn-warning"
+              className="btn btn-primary"
               onClick={updateUser}
+              initial={{opacity: 0, x: '+100vw' }}
+              animate={{opacity: 1, x: 0 }}
+              transition={{ delay: 2, duration: 1.5}}
             >
               Update User
-            </button>
+            </motion.button>
           ) : (
             <div></div>
           )}
           <p>{message}</p>
           <br></br>
-          <button className="btn btn-danger mr-2" onClick={back}>
+          <motion.button 
+          className="btn btn-light mr-2" 
+          onClick={back}
+          initial={{opacity: 0, x: '-100vw' }}
+          animate={{opacity: 1, x: 0 }}
+          transition={{ delay: 2.5, duration: 1.5}}
+          >
             Go back
-          </button>
+          </motion.button>
         </div>
       ) : (
-        <div>
+        <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.5 }}
+        >
           <br />
-          <p>Please click on a User...</p>
-        </div>
+          <Alert variant='warning'>Please click on a User...</Alert>
+        </motion.div>
       )}
     </div>
   );
